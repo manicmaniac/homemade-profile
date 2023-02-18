@@ -3,7 +3,7 @@
 all: example.mobileprovision
 
 clean:
-	$(RM) ca.cer ca_key.pem ca.srl sign_key.pem sign.csr sign.cer
+	$(RM) ca.cer ca_key.pem ca.srl sign_key.pem sign.csr sign.cer example.plist
 
 distclean: clean
 	$(RM) example.mobileprovision
@@ -24,15 +24,17 @@ ca.cer ca.srl: ca_key.pem
 ca_key.pem:
 	openssl genrsa -out $@ 2048
 
-sign_key.pem sign.csr:
+sign.csr: sign_key.pem
 	openssl req \
 		-new \
-		-newkey rsa:2048 \
-		-keyout sign_key.pem \
+		-noenc \
+		-key $< \
 		-sha256 \
-		-nodes \
 		-subj '/emailAddress=user@example.com/CN=user/C=JP' \
 		-out sign.csr
+
+sign_key.pem:
+	openssl genrsa -out $@ 2048
 
 sign.cer: ca.cer ca_key.pem sign.csr codesign_cert.conf
 	openssl x509 \
@@ -47,7 +49,7 @@ sign.cer: ca.cer ca_key.pem sign.csr codesign_cert.conf
 		-subj '/UID=0000000000/CN=iPhone Developer: user@example.com (0000000000)/OU=0000000000/C=US' \
 		-extfile codesign_cert.conf
 
-example.mobileprovision: example.mobileprovision.in sign.cer
+example.plist: example.plist.in sign.cer
 	m4 \
 		-D '__APP_ID_NAME__=Example App' \
 		-D '__APP_ID_PREFIX__=com.example' \
@@ -57,5 +59,18 @@ example.mobileprovision: example.mobileprovision.in sign.cer
 		-D '__NAME__=Example mobileprovision' \
 		-D '__TEAM_NAME__=Example Inc.' \
 		-D '__TIME_TO_LIVE__=365' \
-		-D "__UUID__=$(uuidgen)" \
+		-D "__UUID__=$$(uuidgen)" \
 		$< > $@
+
+example.mobileprovision: example.plist sign.cer sign_key.pem
+	openssl cms \
+		-sign \
+		-md sha1 \
+		-binary \
+		-nodetach \
+		-signer sign.cer \
+		-keyform PEM \
+		-inkey sign_key.pem \
+		-in $< \
+		-outform DER \
+		-out $@
