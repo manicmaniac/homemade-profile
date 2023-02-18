@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AppIDName</key>
+	<string>__APP_ID_NAME__</string>
+	<key>ApplicationIdentifierPrefix</key>
+	<array>
+	<string>__APP_ID_PREFIX__</string>
+	</array>
+	<key>CreationDate</key>
+	<date>__CREATION_DATE__</date>
+	<key>Platform</key>
+	<array>
+		<string>iOS</string>
+	</array>
+	<key>DeveloperCertificates</key>
+	<array>
+		<data>__DEVELOPER_CERTIFICATES__</data>
+	</array>
+	<key>Entitlements</key>
+	<dict>
+		<key>keychain-access-groups</key>
+		<array>
+			<string>__APP_ID_PREFIX__.*</string>
+		</array>
+		<key>get-task-allow</key>
+		<false/>
+		<key>application-identifier</key>
+		<string>__APP_ID_PREFIX__.*</string>
+		<key>com.apple.developer.associated-domains</key>
+		<string>*</string>
+		<key>com.apple.developer.team-identifier</key>
+		<string>__APP_ID_PREFIX__</string>
+		<key>aps-environment</key>
+		<string>production</string>
+	</dict>
+	<key>ExpirationDate</key>
+	<date>__EXPIRATION_DATE__</date>
+	<key>Name</key>
+	<string>__NAME__</string>
+	<key>ProvisionedDevices</key>
+	<array>
+	</array>
+	<key>TeamIdentifier</key>
+	<array>
+		<string>__APP_ID_PREFIX__</string>
+	</array>
+	<key>TeamName</key>
+	<string>__TEAM_NAME__</string>
+	<key>TimeToLive</key>
+	<integer>__TIME_TO_LIVE__</integer>
+	<key>UUID</key>
+	<string>__UUID__</string>
+	<key>Version</key>
+	<integer>1</integer>
+</dict>
+</plist>
