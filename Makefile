@@ -1,3 +1,14 @@
+TEAM_ID=0000000000
+TEAM_NAME=Example Inc.
+PROFILE_NAME=Example mobileprovision
+BUNDLE_IDENTIFIER=*
+APP_ID_NAME=Example App
+APP_ID_PREFIX=$(TEAM_ID)
+APP_ID=$(APP_ID_PREFIX).$(BUNDLE_IDENTIFIER)
+USER_NAME=user
+USER_EMAIL=user@example.com
+USER_COUNTRY=US
+
 .PHONY: all clean distclean
 
 all: example.mobileprovision
@@ -30,7 +41,7 @@ sign.csr: sign_key.pem
 		-noenc \
 		-key $< \
 		-sha256 \
-		-subj '/emailAddress=user@example.com/CN=user/C=JP' \
+		-subj '/emailAddress=$(USER_EMAIL)/CN=$(USER_NAME)/C=$(USER_COUNTRY)' \
 		-out sign.csr
 
 sign_key.pem:
@@ -46,18 +57,19 @@ sign.cer: ca.cer ca_key.pem sign.csr codesign_cert.conf
 		-out $@ \
 		-days 365 \
 		-CAcreateserial \
-		-subj '/UID=0000000000/CN=iPhone Developer: user@example.com (0000000000)/OU=0000000000/C=US' \
+		-subj '/UID=0000000000/CN=iPhone Developer: $(USER_EMAIL) (0000000000)/OU=0000000000/C=US' \
 		-extfile codesign_cert.conf
 
 example.plist: example.plist.in sign.cer
 	m4 \
-		-D '__APP_ID_NAME__=Example App' \
-		-D '__APP_ID_PREFIX__=0000000000' \
+		-D '__APP_ID_NAME__=$(APP_ID_NAME)' \
+		-D '__APP_ID_PREFIX__=$(APP_ID_PREFIX)' \
+		-D '__APP_ID__=$(APP_ID)' \
 		-D "__CREATION_DATE__=$$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
 		-D "__DEVELOPER_CERTIFICATES__=$$(openssl x509 -inform DER -in sign.cer -outform PEM | sed -e '/-----/d' | tr -d '\n')" \
 		-D "__EXPIRATION_DATE__=$$(openssl x509 -enddate -dateopt iso_8601 -noout -inform DER -in sign.cer | cut -d= -f2 | tr ' ' T)" \
-		-D '__NAME__=Example mobileprovision' \
-		-D '__TEAM_NAME__=Example Inc.' \
+		-D '__NAME__=$(PROFILE_NAME)' \
+		-D '__TEAM_NAME__=$(TEAM_NAME)' \
 		-D '__TIME_TO_LIVE__=365' \
 		-D "__UUID__=$$(uuidgen)" \
 		$< > $@

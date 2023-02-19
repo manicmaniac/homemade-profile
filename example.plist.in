@@ -29,7 +29,7 @@
 		<key>get-task-allow</key>
 		<false/>
 		<key>application-identifier</key>
-		<string>__APP_ID_PREFIX__.*</string>
+		<string>__APP_ID__</string>
 		<key>com.apple.developer.associated-domains</key>
 		<string>*</string>
 		<key>com.apple.developer.team-identifier</key>
