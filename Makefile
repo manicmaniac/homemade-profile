@@ -8,8 +8,9 @@ APP_ID=$(APP_ID_PREFIX).$(BUNDLE_IDENTIFIER)
 USER_NAME=user
 USER_EMAIL=user@example.com
 USER_COUNTRY=US
+KEYCHAIN_PATH=~/Library/Keychains/login.keychain-db
 
-.PHONY: all clean distclean
+.PHONY: all clean distclean install uninstall
 
 all: example.mobileprovision
 
@@ -18,6 +19,17 @@ clean:
 
 distclean: clean
 	$(RM) ca.cer ca_key.pem sign_key.pem sign.cer example.mobileprovision
+
+install: sign.cer sign_key.pem example.mobileprovision
+	security import ca.cer -k $(KEYCHAIN_PATH)
+	security import sign.cer -k $(KEYCHAIN_PATH)
+	security import sign_key.pem -k $(KEYCHAIN_PATH)
+	xed example.mobileprovision
+
+uninstall:
+	security delete-certificate -tZ "$$(openssl sha256 ca.cer | cut -d ' ' -f 2)" $(KEYCHAIN_PATH)
+	security delete-identity -tZ "$$(openssl sha256 sign.cer | cut -d ' ' -f 2)" $(KEYCHAIN_PATH)
+	find ~/Library/MobileDevice/Provisioning\ Profiles -type f -name '*.mobileprovision' -exec grep -aq '$(PROFILE_NAME)' {} \; -delete
 
 ca.cer ca.srl: ca_key.pem
 	openssl req \
