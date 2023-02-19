@@ -14,6 +14,8 @@
 	<array>
 		<string>iOS</string>
 	</array>
+    <key>IsXcodeManaged</key>
+    <false/>
 	<key>DeveloperCertificates</key>
 	<array>
 		<data>__DEVELOPER_CERTIFICATES__</data>
