@@ -27,7 +27,7 @@
 			<string>__APP_ID_PREFIX__.*</string>
 		</array>
 		<key>get-task-allow</key>
-		<false/>
+		<true/>
 		<key>application-identifier</key>
 		<string>__APP_ID__</string>
 		<key>com.apple.developer.associated-domains</key>
@@ -35,7 +35,7 @@
 		<key>com.apple.developer.team-identifier</key>
 		<string>__APP_ID_PREFIX__</string>
 		<key>aps-environment</key>
-		<string>production</string>
+		<string>development</string>
 	</dict>
 	<key>ExpirationDate</key>
 	<date>__EXPIRATION_DATE__</date>
