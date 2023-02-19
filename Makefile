@@ -14,10 +14,10 @@ USER_COUNTRY=US
 all: example.mobileprovision
 
 clean:
-	$(RM) ca.cer ca_key.pem ca.srl sign_key.pem sign.csr sign.cer example.plist
+	$(RM) ca.srl sign.csr example.plist
 
 distclean: clean
-	$(RM) example.mobileprovision
+	$(RM) ca.cer ca_key.pem sign_key.pem sign.cer example.mobileprovision
 
 ca.cer ca.srl: ca_key.pem
 	openssl req \
