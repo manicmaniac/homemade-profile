@@ -27,7 +27,7 @@ ca.cer ca.srl: ca_key.pem
 		-key $< \
 		-sha1 \
 		-days 365 \
-		-subj '/C=US/O=Example Inc./OU=Example Certification Authority/CN=Example Root CA' \
+		-subj '/C=US/O=SELFSIGNED/OU=SELFSIGNED Certification Authority/CN=SELFSIGNED Root CA' \
 		-addext 'keyUsage=critical,keyCertSign,cRLSign' \
 		-outform DER \
 		-out $@
