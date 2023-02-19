@@ -52,8 +52,8 @@ sign.cer: ca.cer ca_key.pem sign.csr codesign_cert.conf
 example.plist: example.plist.in sign.cer
 	m4 \
 		-D '__APP_ID_NAME__=Example App' \
-		-D '__APP_ID_PREFIX__=com.example' \
-		-D "__CREATION_DATE__=$$(date -u +%Y-%m-%dT%H-%M-%SZ)" \
+		-D '__APP_ID_PREFIX__=0000000000' \
+		-D "__CREATION_DATE__=$$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
 		-D "__DEVELOPER_CERTIFICATES__=$$(openssl x509 -inform DER -in sign.cer -outform PEM | sed -e '/-----/d' | tr -d '\n')" \
 		-D "__EXPIRATION_DATE__=$$(openssl x509 -enddate -dateopt iso_8601 -noout -inform DER -in sign.cer | cut -d= -f2 | tr ' ' T)" \
 		-D '__NAME__=Example mobileprovision' \
